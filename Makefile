@@ -1,16 +1,74 @@
-name = inception
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: xamayuel <xamayuel@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/05/04 14:59:46 by xamayuel          #+#    #+#              #
+#    Updated: 2024/05/21 17:34:36 by xamayuel         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-all:
-	@printf "Launch configuration ${name}...\n"
-	
-	@docker-compose -f ./srcs/docker-compose.yml --env-file srcs/.env up -d
+# https://github.com/llescure/42_Inception/blob/main/Makefile
+# https://github.com/malatini42/inception/
+BLACK		:= $(shell tput -Txterm setaf 0)
+RED			:= $(shell tput -Txterm setaf 1)
+GREEN		:= $(shell tput -Txterm setaf 2)
+YELLOW		:= $(shell tput -Txterm setaf 3)
+LIGHTPURPLE	:= $(shell tput -Txterm setaf 4)
+PURPLE		:= $(shell tput -Txterm setaf 5)
+BLUE		:= $(shell tput -Txterm setaf 6)
+WHITE		:= $(shell tput -Txterm setaf 7)
+RESET		:= $(shell tput -Txterm sgr0)
 
-list:
-	@echo "            __________NETWORKS__________            \n"
-	@docker network ls
-	@echo "            ___________VOLUMES___________            \n"
-	@docker volume ls
-	@echo "            ___________IMAGES___________            \n"
-	@docker images
-	@echo "            _________CONTAINERS_________            \n"
-	@docker ps -a
+COMPOSE_FILE=./srcs/docker-compose.yml
+
+all: run
+
+run: 
+	@echo "$(GREEN)Building files for volumes ... $(RESET)"
+	@sudo mkdir -p /home/llescure/data/wordpress
+	@sudo mkdir -p /home/llescure/data/mysql
+	@echo "$(GREEN)Building containers ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) up --build
+
+up:
+	@echo "$(GREEN)Building files for volumes ... $(RESET)"
+	@sudo mkdir -p /home/llescure/data/wordpress
+	@sudo mkdir -p /home/llescure/data/mysql
+	@echo "$(GREEN)Building containers in background ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) up -d --build
+
+debug:
+	@echo "$(GREEN)Building files for volumes ... $(RESET)"
+	@sudo mkdir -p /home/llescure/data/wordpress
+	@sudo mkdir -p /home/llescure/data/mysql
+	@echo "$(GREEN)Building containers with log information ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) --verbose up
+
+list:	
+	@echo "$(PURPLE)Listing all containers ... $(RESET)"
+	 docker ps -a
+
+list_volumes:
+	@echo "$(PURPLE)Listing volumes ... $(RESET)"
+	docker volume ls
+
+clean: 	
+	@echo "$(RED)Stopping containers ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) down
+	@-docker stop `docker ps -qa`
+	@-docker rm `docker ps -qa`
+	@echo "$(RED)Deleting all images ... $(RESET)"
+	@-docker rmi -f `docker images -qa`
+	@echo "$(RED)Deleting all volumes ... $(RESET)"
+	@-docker volume rm `docker volume ls -q`
+	@echo "$(RED)Deleting all network ... $(RESET)"
+	@-docker network rm `docker network ls -q`
+	@echo "$(RED)Deleting all data ... $(RESET)"
+	@sudo rm -rf /home/llescure/data/wordpress
+	@sudo rm -rf /home/llescure/data/mysql
+	@echo "$(RED)Deleting all $(RESET)"
+
+.PHONY: run up debug list list_volumes clean

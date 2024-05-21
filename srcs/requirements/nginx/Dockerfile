@@ -1,10 +1,17 @@
-# syntax=docker/dockerfile:1
-FROM alpine:3.18
+# Starting image
+FROM debian:oldstable
+LABEL maintainer "xamayuel@student.42urduliz.com"
 
-RUN echo -e "\033[1;32mUpdate and install NGINX.\033[0m"
-RUN apk update && apk upgrade && apk add --no-cache nginx
+# Install Nginx and Openssl
+RUN apt-get update \
+	&& apt-get -y install nginx \
+	openssl \
+	# Remove apt-get update lists
+    && rm -rf /var/lib/apt/lists/* 
+# Generate self certificate
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+	-out /etc/ssl/xamayuel.42.es.pem -keyout /etc/ssl/xamayuel.42.es.key \
+	-subj "/C=ES/ST=SPAIN/L=ZAMUDIO/O=42 School/OU=llescure/CN=xamayuel.42.es"
 
-RUN echo -e "\033[1;32mEXPOSE PORT 443.\033[0m"
-EXPOSE 443
-RUN echo -e "\033[1;32mCMD.\033[0m"
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
