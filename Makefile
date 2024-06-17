@@ -6,7 +6,7 @@
 #    By: xamayuel <xamayuel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 16:22:05 by xamayuel          #+#    #+#              #
-#    Updated: 2024/06/17 18:59:16 by xamayuel         ###   ########.fr        #
+#    Updated: 2024/06/17 19:37:57 by xamayuel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,12 +29,21 @@ COMPOSE_FILE=./srcs/docker-compose.yml
 all: help
 
 help:
+	@echo "$(PURPLE) _                      _   _     "      
+	@echo "(_)                    | | (_)            "
+	@echo "_ _ __   ___ ___ _ __ | |_ _  ___  _ __  "
+	@echo "| | '_ \ / __/ _ \ '_ \| __| |/ _ \| '_ \ "
+	@echo "| | | | | (_|  __/ |_) | |_| | (_) | | | |"
+	@echo "|_|_| |_|\___\___| .__/ \__|_|\___/|_| |_|"
+	@echo "                 | |                      "
+	@echo "                 |_|  "
 	@echo "$(YELLOW)Available commands:$(RESET)"
 	@echo "$(GREEN)make run$(RESET)           - Build files for volumes and containers."
 	@echo "$(GREEN)make up$(RESET)            - Build files for volumes and start containers in the background."
 	@echo "$(GREEN)make debug$(RESET)         - Build files for volumes and start containers with verbose logging."
 	@echo "$(GREEN)make list$(RESET)          - List all containers."
 	@echo "$(GREEN)make list_volumes$(RESET)  - List all Docker volumes."
+	@echo "$(GREEN)make list_images$(RESET)   - List all Docker images."
 	@echo "$(GREEN)make clean$(RESET)         - Stop and remove all containers, images, volumes, networks, and local data."
 
 run: 
@@ -66,6 +75,10 @@ list_volumes:
 	@echo "$(PURPLE)Listing volumes ... $(RESET)"
 	docker volume ls
 
+list_images:
+	@echo "$(PURPLE)Listing images ... $(RESET)"
+	docker images
+
 clean: 	
 	@echo "$(RED)Stopping containers ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) down
@@ -84,6 +97,7 @@ clean:
 
 portainer:
 	@echo "Building Portainer ...."
-	@-docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+	@-docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always \
+	-v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 
-.PHONY: run up debug list list_volumes clean
+.PHONY: run up debug list list_volumes clean portainer list_images
