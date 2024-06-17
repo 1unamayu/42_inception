@@ -1,12 +1,11 @@
-# Starting image
-FROM alpine:3.17
-LABEL maintainer "xamayuel@student.42urduliz.com"
+FROM debian:bullseye
 
-RUN		apk add --no-cache --quiet --update php8 
+RUN apt-get update && apt-get upgrade -y
 
-RUN apk update && apk add --no-cache --quiet --update curl bash vim \
-	mariadb-client  php-phar php-json php-curl php-fpm php-mysqli php-iconv
+RUN apt-get install -y curl php php7.4-fpm php-mysql mariadb-client netcat
 
+COPY ./tools/conf.sh /
 
+RUN chmod +x conf.sh
 
-
+ENTRYPOINT [ "./conf.sh" ]
