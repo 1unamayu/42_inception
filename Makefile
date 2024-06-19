@@ -6,7 +6,7 @@
 #    By: xamayuel <xamayuel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 16:22:05 by xamayuel          #+#    #+#              #
-#    Updated: 2024/06/17 19:37:57 by xamayuel         ###   ########.fr        #
+#    Updated: 2024/06/19 12:05:25 by xamayuel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,22 +48,25 @@ help:
 
 run: 
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@sudo mkdir -p /home/xamayuel/data/wordpress
-	@sudo mkdir -p /home/xamayuel/data/mariadb
+	@mkdir -p /home/xamayuel/data
+	@mkdir -p /home/xamayuel/data/wordpress
+	@mkdir -p /home/xamayuel/data/mariadb
 	@echo "$(GREEN)Building containers ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) up --build
 
 up:
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@sudo mkdir -p /home/xamayuel/data/wordpress
-	@sudo mkdir -p /home/xamayuel/data/mariadb
+	@mkdir -p /home/xamayuel/data
+	@mkdir -p /home/xamayuel/data/wordpress
+	@mkdir -p /home/xamayuel/data/mariadb
 	@echo "$(GREEN)Building containers in background ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) up -d --build
 
 debug:
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@sudo mkdir -p /home/xamayueldata/wordpress
-	@sudo mkdir -p /home/xamayuel/data/mariadb
+	@mkdir -p /home/xamayuel/data
+	@mkdir -p /home/xamayueldata/wordpress
+	@mkdir -p /home/xamayuel/data/mariadb
 	@echo "$(GREEN)Building containers with log information ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) --verbose up
 
@@ -91,8 +94,7 @@ clean:
 	@echo "$(RED)Deleting all network ... $(RESET)"
 	@-docker network rm `docker network ls -q`
 	@echo "$(RED)Deleting all data ... $(RESET)"
-	@sudo rm -rf /home/xamayuel/data/wordpress
-	@sudo rm -rf /home/xamayuel/data/mariadb
+	@rm -rf /home/xamayuel/data
 	@echo "$(RED)Deleting all $(RESET)"
 
 portainer:
