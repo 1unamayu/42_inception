@@ -6,7 +6,7 @@
 #    By: xamayuel <xamayuel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 16:22:05 by xamayuel          #+#    #+#              #
-#    Updated: 2024/06/19 12:05:25 by xamayuel         ###   ########.fr        #
+#    Updated: 2024/06/22 11:54:07 by xamayuel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ WHITE		:= $(shell tput -Txterm setaf 7)
 RESET		:= $(shell tput -Txterm sgr0)
 
 COMPOSE_FILE=./srcs/docker-compose.yml
-
+VOLUME_FOLDER=/home/xamayuel/data
 all: help
 
 help:
@@ -48,25 +48,25 @@ help:
 
 run: 
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@mkdir -p /home/xamayuel/data
-	@mkdir -p /home/xamayuel/data/wordpress
-	@mkdir -p /home/xamayuel/data/mariadb
+	@mkdir -p $(VOLUME_FOLDER)
+	@mkdir -p $(VOLUME_FOLDER)/wordpress
+	@mkdir -p $(VOLUME_FOLDER)/mariadb
 	@echo "$(GREEN)Building containers ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) up --build
 
 up:
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@mkdir -p /home/xamayuel/data
-	@mkdir -p /home/xamayuel/data/wordpress
-	@mkdir -p /home/xamayuel/data/mariadb
+	@mkdir -p $(VOLUME_FOLDER)
+	@mkdir -p $(VOLUME_FOLDER)wordpress
+	@mkdir -p $(VOLUME_FOLDER)mariadb
 	@echo "$(GREEN)Building containers in background ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) up -d --build
 
 debug:
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@mkdir -p /home/xamayuel/data
-	@mkdir -p /home/xamayueldata/wordpress
-	@mkdir -p /home/xamayuel/data/mariadb
+	@mkdir -p $(VOLUME_FOLDER)
+	@mkdir -p $(VOLUME_FOLDER)/wordpress
+	@mkdir -p $(VOLUME_FOLDER)/mariadb
 	@echo "$(GREEN)Building containers with log information ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) --verbose up
 
@@ -94,7 +94,7 @@ clean:
 	@echo "$(RED)Deleting all network ... $(RESET)"
 	@-docker network rm `docker network ls -q`
 	@echo "$(RED)Deleting all data ... $(RESET)"
-	@rm -rf /home/xamayuel/data
+	@sudo rm -rf $(VOLUME_FOLDER)
 	@echo "$(RED)Deleting all $(RESET)"
 
 portainer:

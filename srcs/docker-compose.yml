@@ -22,6 +22,8 @@ services:
       - wordpress
     volumes:
       - wordpress:/var/www/wordpress
+    env_file:
+      - .env
     networks:
       - wpnetwork
     restart: always
