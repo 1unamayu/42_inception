@@ -6,7 +6,7 @@
 #    By: xamayuel <xamayuel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/17 16:22:05 by xamayuel          #+#    #+#              #
-#    Updated: 2024/06/22 11:54:07 by xamayuel         ###   ########.fr        #
+#    Updated: 2024/06/22 12:01:27 by xamayuel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,13 +52,13 @@ run:
 	@mkdir -p $(VOLUME_FOLDER)/wordpress
 	@mkdir -p $(VOLUME_FOLDER)/mariadb
 	@echo "$(GREEN)Building containers ... $(RESET)"
-	@docker-compose -f $(COMPOSE_FILE) up --build
+	#@docker-compose -f $(COMPOSE_FILE) up --build
 
 up:
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
 	@mkdir -p $(VOLUME_FOLDER)
-	@mkdir -p $(VOLUME_FOLDER)wordpress
-	@mkdir -p $(VOLUME_FOLDER)mariadb
+	@mkdir -p $(VOLUME_FOLDER)/wordpress
+	@mkdir -p $(VOLUME_FOLDER)/mariadb
 	@echo "$(GREEN)Building containers in background ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) up -d --build
 

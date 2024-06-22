@@ -15,7 +15,11 @@ services:
   nginx:
     image: nginx
     container_name: nginx
-    build: ./requirements/nginx
+    build:
+      context: ./requirements/nginx/
+      dockerfile: Dockerfile
+      args:
+        - USER_NEW=${USER}
     ports:
       - "443:443"
     depends_on:
@@ -26,6 +30,8 @@ services:
       - .env
     networks:
       - wpnetwork
+    environment:
+      - USER_NEW=${USER}
     restart: always
   wordpress:
     image: wordpress
