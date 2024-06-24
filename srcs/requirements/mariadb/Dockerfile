@@ -4,8 +4,9 @@ RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y mariadb-server
 
-COPY ./tools/conf.sh /conf.sh
+COPY tools/conf.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/conf.sh
 
-RUN chmod +x /conf.sh
+EXPOSE 3306
 
-ENTRYPOINT [ "./conf.sh" ]
+ENTRYPOINT ["/usr/local/bin/conf.sh"]
