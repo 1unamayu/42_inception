@@ -1,21 +1,29 @@
 FROM debian:bullseye
 
 ARG USER_NEW
+ARG CERTIFICATES_KEY
+ARG CERTIFICATES_CRT
+ARG DOMAIN
 
 RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get install -y nginx openssl
+RUN apt-get install -y nginx openssl gettext
+
 
 RUN mkdir -p /etc/nginx/ssl
 
-RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout \
-	/etc/nginx/ssl/inception.key -subj "/C=ES/ST=Spain/L=Urduliz/O=42/OU=42/CN=${USER_NEW}.42.fr/UID=${USER_NEW}"
+RUN openssl req -x509 -nodes -out ${CERTIFICATES_CRT} -keyout \
+	${CERTIFICATES_KEY} -subj "/C=ES/ST=Spain/L=Urduliz/O=42/OU=42/CN=${USER_NEW}.42.fr/UID=${USER_NEW}"
 
-COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/nginx.conf.template /etc/nginx/nginx.conf.template
 
 RUN mkdir -p /var/www/wordpress
 
-#RUN chown -R www-data:www-data /var/www/wordpress
+RUN chown -R www-data:www-data /var/www/wordpress
+
+
+
+RUN envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
 EXPOSE 443
 

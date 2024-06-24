@@ -20,6 +20,9 @@ services:
       dockerfile: Dockerfile
       args:
         - USER_NEW=${USER}
+        - CERTIFICATES_CRT=${CERTIFICATES_CRT}
+        - CERTIFICATES_KEY=${CERTIFICATES_KEY}
+        - DOMAIN=${USER}.42.fr
     ports:
       - "443:443"
     depends_on:
@@ -30,8 +33,6 @@ services:
       - .env
     networks:
       - wpnetwork
-    environment:
-      - USER_NEW=${USER}
     restart: always
   wordpress:
     image: wordpress

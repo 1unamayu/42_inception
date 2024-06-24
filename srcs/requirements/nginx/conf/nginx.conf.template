@@ -7,12 +7,12 @@ http {
 	server{
 		listen 443 ssl;
 
-		ssl_certificate /etc/nginx/ssl/inception.crt;
-		ssl_certificate_key /etc/nginx/ssl/inception.key;
+		ssl_certificate $CERTIFICATES_CRT;
+		ssl_certificate_key $CERTIFICATES_KEY;
 		ssl_protocols TLSv1.3;
 
 		root /var/www/wordpress;
-		server_name $DOMAIN_NAME;
+		server_name $DOMAIN;
 		index index.php;
 
 		location ~ \.php$ {
