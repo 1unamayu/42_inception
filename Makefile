@@ -10,10 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-# https://github.com/llescure/42_Inception/blob/main/Makefile
-# https://github.com/malatini42/inception/ 
-
-#https://github.com/Forstman1/inception-42
+# 
 BLACK		:= $(shell tput -Txterm setaf 0)
 RED			:= $(shell tput -Txterm setaf 1)
 GREEN		:= $(shell tput -Txterm setaf 2)
@@ -103,3 +100,28 @@ portainer:
 	-v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 
 .PHONY: run up debug list list_volumes clean portainer list_images
+
+#### ENV FILE ARGUMENTS EXAmPLE
+
+#MYSQL SETUP
+MYSQL_DB=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_ROOT_PASSWORD=
+
+#WP SETUP
+DOMAIN_NAME=
+WP_ADMIN_N=
+WP_ADMIN_P=
+WP_TITLE=
+WP_ADMIN_E=
+
+#WP NEW USER set-up
+WP_U_NAME=
+WP_U_PASS=
+WP_U_ROLE=
+WP_U_EMAIL=
+
+#CERTIFICATES
+CERTIFICATES_CRT=
+CERTIFICATES_KEY=

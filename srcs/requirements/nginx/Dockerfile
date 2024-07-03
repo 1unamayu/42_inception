@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bullseye-slim
 
 ARG USER_NEW
 ARG CERTIFICATES_KEY
@@ -7,7 +7,7 @@ ARG DOMAIN
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends nginx openssl gettext && \
+    apt-get install -y --no-install-recommends nginx openssl gettext-base && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
