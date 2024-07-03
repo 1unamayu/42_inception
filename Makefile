@@ -37,6 +37,7 @@ help:
 	@echo "$(YELLOW)Available commands:$(RESET)"
 	@echo "$(GREEN)make run$(RESET)           - Build files for volumes and containers."
 	@echo "$(GREEN)make up$(RESET)            - Build files for volumes and start containers in the background."
+	@echo "$(GREEN)make down$(RESET)          - Stop containers."
 	@echo "$(GREEN)make debug$(RESET)         - Build files for volumes and start containers with verbose logging."
 	@echo "$(GREEN)make list$(RESET)          - List all containers."
 	@echo "$(GREEN)make list_volumes$(RESET)  - List all Docker volumes."
@@ -79,6 +80,16 @@ list_images:
 	@echo "$(PURPLE)Listing images ... $(RESET)"
 	docker images
 
+down:
+	@echo "$(RED)Stopping containers ... $(RESET)"
+	@docker-compose -f $(COMPOSE_FILE) down
+	@echo "$(RED)Deleting all images ... $(RESET)"
+	@-docker images --format "{{.Repository}}:{{.Tag}}" | grep -v "portainer" | xargs -I {} docker rmi {}
+	@echo "$(RED)Deleting all volumes ... $(RESET)"
+	@-docker volume rm `docker volume ls -q`
+	@echo "$(RED)Deleting all network ... $(RESET)"
+	@-docker network rm `docker network ls -q`
+
 clean: 	
 	@echo "$(RED)Stopping containers ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) down
@@ -99,7 +110,7 @@ portainer:
 	@-docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always \
 	-v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 
-.PHONY: run up debug list list_volumes clean portainer list_images
+.PHONY: run up debug list list_volumes clean portainer list_images down
 
 #### ENV FILE ARGUMENTS EXAmPLE
 
